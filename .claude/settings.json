@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls \"/c/Users/matte/Downloads/GigaPricevmax-main \\(7\\)/GigaPricevmax-main/\")"
+    ]
+  }
+}

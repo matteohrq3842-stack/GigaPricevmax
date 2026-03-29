@@ -1,0 +1,43 @@
+﻿node.exe : ÔÜá Prerendering is running in debug mode. Note: This may 
+affect performance and should not be used for production.
+At line:1 char:181
++ ... lyContinue; & "C:\Program Files\nodejs\node.exe" 
+node_modules/next/di ...
++                 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ÔÜá Prerenderin...for produ 
+   ction.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Ôû▓ Next.js 16.1.1 (webpack)
+- Environments: .env.local
+- Experiments (use with caution):
+  Ô¿» prerenderEarlyExit (disabled by `--debug-prerender`)
+  Ô¿» serverMinification (disabled by `--debug-prerender`)
+  Ô£ô serverSourceMaps (enabled by `--debug-prerender`)
+
+  Creating an optimized production build ...
+Ô£ô Compiled successfully in 37.2s
+  Running TypeScript ...
+Failed to compile.
+
+.next/types/app/(site)/deal/[id]/page.ts:36:29
+Type error: Type '{ params: { id: string; }; }' does not satisfy the 
+constraint 'PageProps'.
+  Types of property 'params' are incompatible.
+    Type '{ id: string; }' is missing the following properties from type 
+'Promise<any>': then, catch, finally, [Symbol.toStringTag]
+
+[0m [90m 34 |[39m
+ [90m 35 |[39m [90m// Check the prop type of the entry function[39m
+[31m[1m>[22m[39m[90m 36 |[39m checkFields[33m<[39m[33mDiff[39m
+[33m<[39m[33mPageProps[39m[33m,[39m [33mFirstArg[39m[33m<[39m[3
+3mTEntry[39m[[32m'default'[39m][33m>[39m[33m,[39m 
+[32m'default'[39m[33m>>[39m()
+ [90m    |[39m                             [31m[1m^[22m[39m
+ [90m 37 |[39m
+ [90m 38 |[39m [90m// Check the arguments and return type of the 
+generateMetadata function[39m
+ [90m 39 |[39m [36mif[39m ([32m'generateMetadata'[39m [36min[39m 
+entry) {[0m
+Next.js build worker exited with code: 1 and signal: null

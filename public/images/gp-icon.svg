@@ -1,0 +1,21 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Définition du dégradé pour le texte -->
+    <defs>
+        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="12%" style="stop-color:#9187EE;stop-opacity:1" />
+            <stop offset="46%" style="stop-color:#5B5EF7;stop-opacity:1" />
+            <stop offset="80%" style="stop-color:#465AE3;stop-opacity:1" />
+        </linearGradient>
+    </defs>
+
+    <!-- Fond Boîte Noire avec Bordure Violette -->
+    <!-- rx=16 pour l'arrondi (squircle) -->
+    <rect x="2" y="2" width="60" height="60" rx="16" fill="#000000" stroke="#793BDC" stroke-width="4" />
+
+    <!-- Texte GP -->
+    <text x="50%" y="50%" dominant-baseline="central" text-anchor="middle" 
+          font-family="Segoe UI, Arial, sans-serif" font-weight="900" font-size="34" 
+          fill="url(#grad1)">
+        GP
+    </text>
+</svg>

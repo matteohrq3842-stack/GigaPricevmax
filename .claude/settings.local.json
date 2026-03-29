@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find /c/Users/matte/Downloads/archive-2025-12-14T171331Z/ -type f -name *.py)",
+      "Bash(find '/c/Users/matte/Downloads/GigaPricevmax-main \\(7\\)' -type f -name *.py)",
+      "Bash(find '/c/Users/matte/Downloads/GigaPricevmax-main \\(7\\)' -type f \\\\\\(-name *database* -o -name *db* -o -name *mysql* \\\\\\))",
+      "Bash(find \"/c/Users/matte/Downloads/GigaPricevmax-main \\(7\\)\" -type f -name \"*.sql\")",
+      "Bash(grep -r \"users.*discord_id\\\\|alerts.*user_id\\\\|favorites\" '/c/Users/matte/Downloads/GigaPricevmax-main \\(7\\)/GigaPricevmax-main/archive-2026-03-29T170551Z/cogs/' --include=*.py)",
+      "Bash(find \"/c/Users/matte/Downloads/GigaPricevmax-main \\(7\\)/GigaPricevmax-main/src\" -type f -name \"*.ts\" -o -name \"*.tsx\")",
+      "Bash(find \"c:/Users/matte/Downloads/GigaPricevmax-main \\(7\\)/GigaPricevmax-main/src/components\" -type f \\\\\\( -name \"*.tsx\" -o -name \"*.ts\" -o -name \"*.jsx\" -o -name \"*.js\" \\\\\\))"
+    ]
+  }
+}

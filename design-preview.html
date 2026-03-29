@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GigaPrice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:     #09071a;
+  --s1:     #100d24;
+  --s2:     #18143a;
+  --s3:     #221d4a;
+  --bdr:    rgba(255,255,255,0.07);
+  --bdr2:   rgba(255,255,255,0.12);
+
+  --purple: #7c3aed;
+  --p2:     #6d28d9;
+  --violet: #a78bfa;
+  --teal:   #2dd4bf;
+  --amber:  #fbbf24;
+  --red:    #f87171;
+  --green:  #4ade80;
+
+  --txt:    #f0eeff;
+  --t2:     #8b87b8;
+  --t3:     #4a4670;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--txt);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4 { font-family: 'Syne', sans-serif; letter-spacing: -0.02em; }
+
+a { text-decoration: none; color: inherit; }
+
+/* ── NAV ──────────────────────────────────────────────────────── */
+nav {
+  position: sticky; top: 0; z-index: 300;
+  background: rgba(9,7,26,0.9);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--bdr);
+}
+.nav-wrap {
+  max-width: 1440px; margin: 0 auto;
+  padding: 0 32px; height: 56px;
+  display: flex; align-items: center; gap: 0;
+}
+.logo {
+  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px;
+  background: linear-gradient(120deg, #c4b5fd 0%, var(--purple) 70%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  letter-spacing: -0.03em; margin-right: 32px; white-space: nowrap;
+}
+.nav-links { display: flex; gap: 0; }
+.nav-links a {
+  padding: 0 14px; height: 56px;
+  display: flex; align-items: center;
+  font-size: 13px; font-weight: 500; color: var(--t2);
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s;
+}
+.nav-links a:hover { color: var(--txt); }
+.nav-links a.on { color: var(--violet); border-color: var(--purple); }
+.nav-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.search {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--s1); border: 1px solid var(--bdr);
+  padding: 6px 12px; border-radius: 7px; cursor: text;
+  color: var(--t3); font-size: 12px; min-width: 200px;
+  transition: border-color 0.2s;
+}
+.search:hover { border-color: var(--bdr2); }
+.search svg { flex-shrink: 0; opacity: 0.45; }
+.kbd-hint { margin-left: auto; background: var(--s2); border: 1px solid var(--bdr); padding: 1px 5px; border-radius: 3px; font-size: 10px; color: var(--t3); }
+.btn-login {
+  display: flex; align-items: center; gap: 7px;
+  background: var(--purple); color: #fff;
+  padding: 7px 16px; border-radius: 7px; border: none;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  box-shadow: 0 4px 18px rgba(124,58,237,0.4);
+  transition: all 0.2s;
+}
+.btn-login:hover { background: var(--p2); transform: translateY(-1px); }
+
+/* ── PLATFORM TABS ────────────────────────────────────────────── */
+.tabs-bar {
+  background: var(--s1);
+  border-bottom: 1px solid var(--bdr);
+}
+.tabs-wrap {
+  max-width: 1440px; margin: 0 auto; padding: 0 32px;
+  display: flex; overflow-x: auto; gap: 0;
+}
+.tabs-wrap::-webkit-scrollbar { display: none; }
+.tab {
+  display: flex; align-items: center; gap: 7px;
+  padding: 10px 18px; border-bottom: 2px solid transparent;
+  font-size: 12px; font-weight: 600; color: var(--t2);
+  cursor: pointer; transition: all 0.15s; white-space: nowrap;
+}
+.tab:hover { color: var(--txt); }
+.tab.on { color: var(--violet); border-color: var(--purple); }
+.dot { width: 6px; height: 6px; border-radius: 50%; }
+
+/* ── HERO ─────────────────────────────────────────────────────── */
+.hero {
+  position: relative;
+  min-height: 520px;
+  overflow: hidden;
+  display: flex; align-items: stretch;
+}
+
+/* full bleed bg */
+.hero-bg-img {
+  position: absolute; inset: 0;
+  background: url('https://cdn.akamai.steamstatic.com/steam/apps/2835570/library_hero.jpg') center/cover no-repeat;
+  filter: brightness(0.15) saturate(1.8) hue-rotate(10deg);
+}
+.hero-bg-grad {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(to right, rgba(9,7,26,1) 0%, rgba(9,7,26,0.85) 38%, rgba(9,7,26,0.4) 65%, rgba(9,7,26,0.75) 100%),
+    radial-gradient(ellipse 70% 100% at 10% 60%, rgba(109,28,217,0.2) 0%, transparent 60%);
+}
+
+.hero-inner {
+  position: relative; z-index: 2;
+  max-width: 1440px; margin: 0 auto; width: 100%; padding: 0 32px;
+  display: grid; grid-template-columns: 1fr 1fr;
+  align-items: center; gap: 0;
+  min-height: 520px;
+}
+
+/* LEFT */
+.hero-text { padding: 64px 0; }
+.pill {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: rgba(124,58,237,0.15); border: 1px solid rgba(139,92,246,0.3);
+  color: var(--violet); font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.07em;
+  padding: 5px 13px 5px 9px; border-radius: 100px;
+  margin-bottom: 22px;
+}
+.pill-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--violet); box-shadow: 0 0 8px var(--violet);
+  animation: blink 2s ease-in-out infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+h1.hero-title {
+  font-size: 54px; line-height: 1.05; font-weight: 800; color: #fff;
+  margin-bottom: 18px;
+}
+h1.hero-title em {
+  font-style: normal;
+  background: linear-gradient(120deg, #c4b5fd, var(--purple));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.hero-desc { font-size: 15px; color: var(--t2); line-height: 1.75; max-width: 400px; margin-bottom: 30px; }
+
+.hero-btns { display: flex; gap: 12px; margin-bottom: 44px; }
+.btn-cta {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: var(--purple); color: #fff;
+  padding: 12px 26px; border-radius: 8px; border: none;
+  font-size: 14px; font-weight: 700; cursor: pointer;
+  box-shadow: 0 6px 24px rgba(124,58,237,0.45);
+  transition: all 0.2s;
+}
+.btn-cta:hover { background: var(--p2); transform: translateY(-2px); box-shadow: 0 10px 30px rgba(124,58,237,0.55); }
+.btn-outline {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: transparent; border: 1px solid var(--bdr2);
+  color: var(--txt); padding: 12px 22px; border-radius: 8px;
+  font-size: 14px; font-weight: 600; cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-outline:hover { background: rgba(255,255,255,0.05); border-color: var(--violet); }
+
+.hero-kpis { display: flex; gap: 36px; padding-top: 28px; border-top: 1px solid var(--bdr); }
+.kpi-val { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; color: #fff; }
+.kpi-lbl { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--t3); margin-top: 2px; }
+
+/* RIGHT: stacked portrait cards */
+.hero-cards {
+  display: flex; justify-content: center; align-items: center;
+  gap: 16px; padding: 40px 0 40px 32px;
+}
+.hc-main {
+  width: 180px; flex-shrink: 0;
+  border-radius: 12px; overflow: hidden;
+  border: 1px solid rgba(139,92,246,0.25);
+  box-shadow: 0 30px 70px rgba(0,0,0,0.8), 0 0 0 1px rgba(139,92,246,0.1);
+  background: var(--s1); cursor: pointer;
+  transition: transform 0.35s ease;
+}
+.hc-main:hover { transform: translateY(-8px) rotate(-1deg); }
+.hc-main img { width: 100%; aspect-ratio: 2/3; object-fit: cover; display: block; }
+.hc-foot { padding: 10px 12px; }
+.hc-name { font-size: 11px; font-weight: 700; color: var(--txt); margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hc-prices { display: flex; align-items: center; justify-content: space-between; }
+.hc-old { font-size: 10px; color: var(--t3); text-decoration: line-through; }
+.hc-new { font-size: 15px; font-weight: 800; color: var(--green); }
+.hc-pct { font-size: 9px; font-weight: 800; background: var(--red); color: #fff; padding: 2px 5px; border-radius: 3px; }
+.hc-free { font-size: 13px; font-weight: 800; color: var(--teal); }
+
+.hc-stack { display: flex; flex-direction: column; gap: 12px; }
+.hc-sm {
+  width: 128px; flex-shrink: 0;
+  border-radius: 8px; overflow: hidden;
+  border: 1px solid var(--bdr);
+  box-shadow: 0 8px 28px rgba(0,0,0,0.5);
+  background: var(--s1); cursor: pointer; transition: all 0.22s;
+}
+.hc-sm:hover { border-color: rgba(139,92,246,0.35); transform: translateX(-4px); }
+.hc-sm img { width: 100%; aspect-ratio: 2/3; object-fit: cover; display: block; }
+.hc-sm-foot { padding: 7px 9px; }
+.hc-sm-name { font-size: 10px; font-weight: 700; color: var(--txt); margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hc-sm-price { font-size: 12px; font-weight: 700; color: var(--green); }
+.hc-sm-free { font-size: 12px; font-weight: 700; color: var(--teal); }
+
+/* ── TICKER ───────────────────────────────────────────────────── */
+.ticker {
+  background: linear-gradient(90deg, #4c1d95, var(--purple), #7c3aed, #6d28d9, #4c1d95);
+  background-size: 300%;
+  animation: tg 12s ease infinite;
+  overflow: hidden;
+}
+@keyframes tg { 0%,100%{background-position:0%} 50%{background-position:100%} }
+.ticker-row { display: flex; align-items: stretch; }
+.ticker-tag {
+  background: rgba(0,0,0,0.3);
+  padding: 9px 20px;
+  font-size: 10px; font-weight: 800; color: #fff;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  display: flex; align-items: center; gap: 6px;
+  border-right: 1px solid rgba(255,255,255,0.12); flex-shrink: 0;
+}
+.ticker-track-wrap { flex: 1; overflow: hidden; }
+.ticker-track {
+  display: inline-flex; align-items: center;
+  white-space: nowrap;
+  animation: slide 32s linear infinite;
+}
+.ticker-track:hover { animation-play-state: paused; }
+@keyframes slide { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+.ti {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 9px 20px; font-size: 12px; font-weight: 600;
+  color: rgba(255,255,255,0.9);
+  border-right: 1px solid rgba(255,255,255,0.1);
+  cursor: pointer; transition: background 0.15s;
+}
+.ti:hover { background: rgba(0,0,0,0.15); }
+.ti-off { font-size: 10px; font-weight: 800; background: rgba(0,0,0,0.35); padding: 1px 6px; border-radius: 3px; color: #fff; }
+
+/* ── SECTION BASE ─────────────────────────────────────────────── */
+.page { max-width: 1440px; margin: 0 auto; padding: 0 32px; }
+.sec { padding: 48px 0; }
+.sec-top { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 24px; }
+.sec-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--violet); margin-bottom: 5px; }
+.sec-title { font-size: 22px; font-weight: 800; color: #fff; line-height: 1.1; }
+.sec-title .dim { color: var(--t2); }
+.see-all {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 12px; font-weight: 600; color: var(--t2);
+  border: 1px solid var(--bdr); border-radius: 6px;
+  padding: 6px 13px; cursor: pointer; background: none;
+  transition: all 0.15s;
+}
+.see-all:hover { color: var(--txt); border-color: var(--bdr2); background: rgba(255,255,255,0.03); }
+.sep { border: none; border-top: 1px solid var(--bdr); }
+
+/* ── PORTRAIT CARDS ───────────────────────────────────────────── */
+.pcards { display: grid; grid-template-columns: repeat(7, 1fr); gap: 14px; }
+.pcard {
+  background: var(--s1); border: 1px solid var(--bdr);
+  border-radius: 10px; overflow: hidden; cursor: pointer;
+  transition: all 0.25s; position: relative;
+}
+.pcard:hover {
+  border-color: rgba(139,92,246,0.4);
+  transform: translateY(-5px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(139,92,246,0.2);
+}
+.pcard-cover { position: relative; aspect-ratio: 2/3; overflow: hidden; background: var(--s2); }
+.pcard-cover img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s; }
+.pcard:hover .pcard-cover img { transform: scale(1.06); }
+.pcard-badges { position: absolute; top: 8px; left: 8px; right: 8px; display: flex; justify-content: space-between; align-items: flex-start; }
+.b-store { font-size: 8px; font-weight: 700; text-transform: uppercase; padding: 3px 6px; border-radius: 3px; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); color: var(--t2); border: 1px solid rgba(255,255,255,0.07); }
+.b-off { font-size: 10px; font-weight: 800; padding: 3px 6px; border-radius: 3px; background: #dc2626; color: #fff; }
+.pcard-score { position: absolute; bottom: 8px; left: 8px; }
+.mc { display: inline-block; font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 3px; }
+.mc-g { background: #14532d; color: #4ade80; }
+.mc-y { background: #451a03; color: #fbbf24; }
+.pcard-body { padding: 9px 10px; }
+.pcard-name { font-size: 11px; font-weight: 700; color: var(--txt); margin-bottom: 6px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.35; min-height: 29px; }
+.pcard-pr { display: flex; align-items: center; justify-content: space-between; }
+.pr-new { font-size: 15px; font-weight: 800; color: var(--green); }
+.pr-old { font-size: 10px; color: var(--t3); text-decoration: line-through; }
+.pr-free { font-size: 13px; font-weight: 800; color: var(--teal); }
+
+/* ── FEATURED GRID ────────────────────────────────────────────── */
+.feat { display: grid; grid-template-columns: 3fr 2fr; grid-template-rows: 1fr 1fr; gap: 14px; height: 500px; }
+.feat-big { grid-row: 1/3; position: relative; border-radius: 12px; overflow: hidden; cursor: pointer; border: 1px solid var(--bdr); transition: border-color 0.2s; }
+.feat-big:hover { border-color: rgba(139,92,246,0.4); }
+.feat-big img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.6s; }
+.feat-big:hover img { transform: scale(1.03); }
+.feat-big-ov {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(9,7,26,0.97) 0%, rgba(9,7,26,0.5) 38%, transparent 65%);
+  display: flex; flex-direction: column; justify-content: flex-end; padding: 24px;
+}
+.feat-tag { display: inline-flex; align-items: center; gap: 5px; background: var(--purple); color: #fff; font-size: 9px; font-weight: 700; padding: 4px 10px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 10px; width: fit-content; }
+.feat-big-title { font-size: 26px; font-weight: 800; color: #fff; line-height: 1.1; margin-bottom: 8px; }
+.feat-big-desc { font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.6; margin-bottom: 14px; max-width: 350px; }
+.feat-row { display: flex; align-items: center; gap: 10px; }
+.feat-price { font-size: 22px; font-weight: 800; color: var(--green); }
+.feat-old { font-size: 12px; color: var(--t3); text-decoration: line-through; }
+.feat-badge { background: #dc2626; color: #fff; font-size: 10px; font-weight: 800; padding: 3px 7px; border-radius: 4px; }
+.feat-btn { margin-left: auto; background: var(--purple); color: #fff; padding: 9px 18px; border-radius: 7px; font-size: 12px; font-weight: 700; border: none; cursor: pointer; box-shadow: 0 4px 16px rgba(124,58,237,0.45); transition: all 0.2s; }
+.feat-btn:hover { background: var(--p2); }
+
+.feat-sm { position: relative; border-radius: 10px; overflow: hidden; cursor: pointer; border: 1px solid var(--bdr); transition: all 0.2s; }
+.feat-sm:hover { border-color: rgba(139,92,246,0.3); transform: translateY(-2px); }
+.feat-sm img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s; }
+.feat-sm:hover img { transform: scale(1.05); }
+.feat-sm-ov { position: absolute; inset: 0; background: linear-gradient(to top, rgba(9,7,26,0.92) 0%, transparent 55%); padding: 16px; display: flex; flex-direction: column; justify-content: flex-end; }
+.feat-sm-name { font-size: 14px; font-weight: 800; color: #fff; margin-bottom: 5px; }
+.feat-sm-row { display: flex; align-items: center; gap: 7px; }
+.feat-sm-pr { font-size: 15px; font-weight: 800; color: var(--green); }
+.feat-sm-old { font-size: 11px; color: rgba(255,255,255,0.35); text-decoration: line-through; }
+
+/* ── RANKINGS ─────────────────────────────────────────────────── */
+.ranks { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+.rank-card { background: var(--s1); border: 1px solid var(--bdr); border-radius: 10px; overflow: hidden; cursor: pointer; transition: all 0.22s; position: relative; }
+.rank-card:hover { border-color: rgba(139,92,246,0.3); transform: translateY(-4px); box-shadow: 0 14px 36px rgba(0,0,0,0.55); }
+.rank-n { position: absolute; top: 8px; left: 8px; z-index: 2; font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 800; text-shadow: 0 2px 8px rgba(0,0,0,0.9); }
+.n1 { color: #fbbf24; text-shadow: 0 0 14px rgba(251,191,36,0.5); }
+.n2 { color: #94a3b8; }
+.n3 { color: #c07d4e; }
+.nrest { color: var(--t3); }
+.rank-img { aspect-ratio: 16/9; overflow: hidden; }
+.rank-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.35s; }
+.rank-card:hover .rank-img img { transform: scale(1.07); }
+.rank-body { padding: 10px 12px; }
+.rank-name { font-size: 12px; font-weight: 700; color: var(--txt); margin-bottom: 7px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 32px; line-height: 1.3; }
+.rank-foot { display: flex; justify-content: space-between; align-items: center; }
+.rank-price { font-size: 14px; font-weight: 800; color: var(--green); }
+
+/* ── SPLIT ────────────────────────────────────────────────────── */
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+
+.promo-list { display: flex; flex-direction: column; gap: 8px; }
+.promo-row {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--s1); border: 1px solid var(--bdr);
+  border-radius: 9px; padding: 10px 14px;
+  cursor: pointer; transition: all 0.18s;
+}
+.promo-row:hover { border-color: rgba(139,92,246,0.25); background: var(--s2); }
+.promo-pos { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; color: var(--t3); width: 22px; text-align: center; flex-shrink: 0; }
+.promo-thumb { width: 44px; height: 60px; border-radius: 5px; overflow: hidden; flex-shrink: 0; background: var(--s2); }
+.promo-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.promo-info { flex: 1; min-width: 0; }
+.promo-name { font-size: 13px; font-weight: 700; color: var(--txt); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px; }
+.promo-sub { font-size: 10px; color: var(--t3); margin-bottom: 5px; }
+.promo-prices { display: flex; align-items: center; gap: 7px; }
+.p-now { font-size: 14px; font-weight: 800; color: var(--green); }
+.p-was { font-size: 10px; color: var(--t3); text-decoration: line-through; }
+.p-off { background: rgba(248,113,113,0.14); color: var(--red); font-size: 9px; font-weight: 700; padding: 2px 5px; border-radius: 3px; }
+
+.free-g { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+.fc {
+  background: var(--s1); border: 1px solid var(--bdr);
+  border-radius: 9px; overflow: hidden; cursor: pointer;
+  position: relative; transition: all 0.2s;
+}
+.fc:hover { border-color: rgba(45,212,191,0.35); transform: translateY(-3px); }
+.fc-img { aspect-ratio: 16/9; overflow: hidden; }
+.fc-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s; }
+.fc:hover .fc-img img { transform: scale(1.05); }
+.fc-badge { position: absolute; top: 7px; right: 7px; background: var(--teal); color: #0a0a0a; font-size: 8px; font-weight: 800; padding: 3px 7px; border-radius: 3px; text-transform: uppercase; letter-spacing: .05em; }
+.fc-body { padding: 8px 10px; }
+.fc-name { font-size: 11px; font-weight: 700; color: var(--txt); margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fc-time { font-size: 10px; color: var(--amber); font-weight: 600; }
+.fc-perm { font-size: 10px; color: var(--teal); font-weight: 600; }
+
+/* ── RELEASES ─────────────────────────────────────────────────── */
+.rels { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.rel { background: var(--s1); border: 1px solid var(--bdr); border-radius: 10px; overflow: hidden; cursor: pointer; transition: all 0.2s; }
+.rel:hover { border-color: rgba(139,92,246,0.25); transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0,0,0,0.5); }
+.rel-cover { aspect-ratio: 16/9; overflow: hidden; position: relative; }
+.rel-cover img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s; }
+.rel:hover .rel-cover img { transform: scale(1.05); }
+.new-badge { position: absolute; top: 8px; left: 8px; background: rgba(74,222,128,0.14); border: 1px solid rgba(74,222,128,0.3); color: var(--green); font-size: 8px; font-weight: 700; padding: 3px 7px; border-radius: 3px; text-transform: uppercase; letter-spacing: .06em; }
+.rel-body { padding: 11px 12px; }
+.rel-name { font-size: 13px; font-weight: 700; color: var(--txt); margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rel-foot { display: flex; justify-content: space-between; align-items: center; }
+.rel-date { font-size: 11px; color: var(--t3); }
+.rel-price { font-size: 14px; font-weight: 800; color: var(--green); }
+
+/* ── NEWS ─────────────────────────────────────────────────────── */
+.news { display: grid; grid-template-columns: 2fr repeat(3,1fr); gap: 14px; }
+.news-big { border-radius: 12px; overflow: hidden; border: 1px solid var(--bdr); cursor: pointer; transition: border-color 0.2s; }
+.news-big:hover { border-color: rgba(139,92,246,0.3); }
+.news-big img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; transition: transform 0.4s; }
+.news-big:hover img { transform: scale(1.03); }
+.news-big-body { padding: 14px 18px 18px; background: var(--s1); }
+.n-cat { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--violet); margin-bottom: 7px; }
+.news-big-title { font-size: 16px; font-weight: 800; color: var(--txt); line-height: 1.35; margin-bottom: 6px; }
+.n-date { font-size: 11px; color: var(--t3); }
+
+.news-sm { background: var(--s1); border: 1px solid var(--bdr); border-radius: 10px; overflow: hidden; cursor: pointer; transition: all 0.2s; }
+.news-sm:hover { border-color: rgba(139,92,246,0.25); transform: translateY(-2px); }
+.news-sm img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; transition: transform 0.3s; }
+.news-sm:hover img { transform: scale(1.05); }
+.news-sm-body { padding: 10px 12px; }
+.news-sm-title { font-size: 12px; font-weight: 700; color: var(--txt); line-height: 1.4; margin-bottom: 5px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* ── FOOTER ───────────────────────────────────────────────────── */
+footer { background: var(--s1); border-top: 1px solid var(--bdr); margin-top: 56px; padding: 48px 0 28px; }
+.footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+.footer-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; background: linear-gradient(120deg, #c4b5fd, var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: block; margin-bottom: 12px; }
+.footer-desc { font-size: 13px; color: var(--t2); line-height: 1.75; max-width: 260px; margin-bottom: 20px; }
+.footer-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.ftag { padding: 4px 10px; border-radius: 100px; background: var(--s2); border: 1px solid var(--bdr); font-size: 10px; color: var(--t3); }
+.fc-title { font-size: 11px; font-weight: 700; color: var(--txt); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 14px; }
+.fcol a { display: block; font-size: 13px; color: var(--t2); margin-bottom: 9px; transition: color .15s; }
+.fcol a:hover { color: var(--txt); }
+.footer-bot { border-top: 1px solid var(--bdr); padding-top: 22px; display: flex; justify-content: space-between; align-items: center; }
+.footer-copy { font-size: 11px; color: var(--t3); }
+.footer-pills { display: flex; gap: 7px; }
+.fpill { padding: 3px 9px; border-radius: 4px; background: var(--s2); border: 1px solid var(--bdr); font-size: 10px; color: var(--t3); }
+
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--s3); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══════════════════════════════════════════════════════ -->
+<nav>
+  <div class="nav-wrap">
+    <div class="logo">GigaPrice</div>
+    <div class="nav-links">
+      <a href="#" class="on">Accueil</a>
+      <a href="#">Promotions</a>
+      <a href="#">Jeux Gratuits</a>
+      <a href="#">Hardware</a>
+      <a href="#">Actualités</a>
+      <a href="#">Communauté</a>
+    </div>
+    <div class="nav-right">
+      <div class="search">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <span>Rechercher un jeu…</span>
+        <span class="kbd-hint">⌘K</span>
+      </div>
+      <button class="btn-login">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.492c-1.53-.69-3.17-1.2-4.885-1.49a.075.075 0 0 0-.079.036c-.21.369-.444.85-.608 1.23a18.566 18.566 0 0 0-5.487 0 12.36 12.36 0 0 0-.617-1.23A.077.077 0 0 0 8.562 3c-1.714.29-3.354.8-4.885 1.491a.07.07 0 0 0-.032.027C.533 9.093-.32 13.555.099 17.961a.08.08 0 0 0 .031.055 20.03 20.03 0 0 0 5.993 2.98.078.078 0 0 0 .084-.026c.462-.62.874-1.275 1.226-1.963.021-.04.001-.088-.041-.104a13.201 13.201 0 0 1-1.872-.878.075.075 0 0 1-.008-.125c.126-.093.252-.19.372-.287a.075.075 0 0 1 .078-.01c3.927 1.764 8.18 1.764 12.061 0a.075.075 0 0 1 .079.009c.12.098.245.195.372.288a.075.075 0 0 1-.006.125c-.598.344-1.22.635-1.873.877a.075.075 0 0 0-.041.105c.36.687.772 1.341 1.225 1.962a.077.077 0 0 0 .084.028 19.963 19.963 0 0 0 6.002-2.981.076.076 0 0 0 .032-.054c.5-5.094-.838-9.52-3.549-13.442a.06.06 0 0 0-.031-.028z"/></svg>
+        Connexion Discord
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══ TABS ════════════════════════════════════════════════════ -->
+<div class="tabs-bar">
+  <div class="tabs-wrap">
+    <div class="tab on"><span class="dot" style="background:#a78bfa;box-shadow:0 0 6px #a78bfa"></span>TOUT</div>
+    <div class="tab">Steam</div>
+    <div class="tab">Epic Games</div>
+    <div class="tab">GOG</div>
+    <div class="tab">Ubisoft</div>
+    <div class="tab">EA App</div>
+    <div class="tab"><span class="dot" style="background:#22c55e;box-shadow:0 0 5px #22c55e"></span>Xbox</div>
+    <div class="tab"><span class="dot" style="background:#0070d1;box-shadow:0 0 5px #0070d1"></span>PlayStation</div>
+    <div class="tab"><span class="dot" style="background:#e4000f;box-shadow:0 0 5px #e4000f"></span>Nintendo</div>
+  </div>
+</div>
+
+<!-- ═══ HERO ════════════════════════════════════════════════════ -->
+<div class="hero">
+  <div class="hero-bg-img"></div>
+  <div class="hero-bg-grad"></div>
+  <div class="hero-inner">
+
+    <div class="hero-text">
+      <div class="pill"><span class="pill-dot"></span>Mis à jour en temps réel</div>
+      <h1 class="hero-title">Les meilleures<br><em>promos gaming</em><br>au même endroit</h1>
+      <p class="hero-desc">Steam, GOG, Epic, Xbox, PlayStation, Nintendo — toutes les offres triées et comparées.</p>
+      <div class="hero-btns">
+        <button class="btn-cta">Voir les promotions →</button>
+        <button class="btn-outline">Jeux gratuits</button>
+      </div>
+      <div class="hero-kpis">
+        <div><div class="kpi-val">12 400+</div><div class="kpi-lbl">Jeux suivis</div></div>
+        <div><div class="kpi-val">340</div><div class="kpi-lbl">Promos actives</div></div>
+        <div><div class="kpi-val">8</div><div class="kpi-lbl">Stores comparés</div></div>
+      </div>
+    </div>
+
+    <div class="hero-cards">
+      <div class="hc-main">
+        <img src="https://cdn.akamai.steamstatic.com/steam/apps/2835570/library_600x900.jpg" alt="Black Myth" onerror="this.style.cssText='display:block;width:100%;aspect-ratio:2/3;background:#18143a'">
+        <div class="hc-foot">
+          <div class="hc-name">Black Myth: Wukong</div>
+          <div class="hc-prices"><div><div class="hc-old">59,99 €</div><div class="hc-new">35,99 €</div></div><span class="hc-pct">-40%</span></div>
+        </div>
+      </div>
+      <div class="hc-stack">
+        <div class="hc-sm">
+          <img src="https://cdn.akamai.steamstatic.com/steam/apps/553850/library_600x900.jpg" alt="Helldivers 2" onerror="this.style.cssText='display:block;width:100%;aspect-ratio:2/3;background:#18143a'">
+          <div class="hc-sm-foot"><div class="hc-sm-name">Helldivers 2</div><div class="hc-sm-price">19,99 €</div></div>
+        </div>
+        <div class="hc-sm">
+          <img src="https://cdn.akamai.steamstatic.com/steam/apps/1716740/library_600x900.jpg" alt="Elden Ring" onerror="this.style.cssText='display:block;width:100%;aspect-ratio:2/3;background:#18143a'">
+          <div class="hc-sm-foot"><div class="hc-sm-name">Elden Ring</div><div class="hc-sm-price">32,49 €</div></div>
+        </div>
+        <div class="hc-sm">
+          <img src="https://cdn.akamai.steamstatic.com/steam/apps/1623730/library_600x900.jpg" alt="Palworld" onerror="this.style.cssText='display:block;width:100%;aspect-ratio:2/3;background:#18143a'">
+          <div class="hc-sm-foot"><div class="hc-sm-name">Palworld</div><div class="hc-sm-free">GRATUIT</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ TICKER ══════════════════════════════════════════════════ -->
+<div class="ticker">
+  <div class="ticker-row">
+    <div class="ticker-tag">
+      <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>FLASH
+    </div>
+    <div class="ticker-track-wrap">
+      <div class="ticker-track">
+        <span class="ti">Black Myth: Wukong <span class="ti-off">-40%</span> 35,99 €</span>
+        <span class="ti">Cyberpunk 2077 <span class="ti-off">-70%</span> 14,99 €</span>
+        <span class="ti">Elden Ring <span class="ti-off">-35%</span> 32,49 €</span>
+        <span class="ti">Baldur's Gate 3 <span class="ti-off">-30%</span> 41,99 €</span>
+        <span class="ti">The Witcher 3 <span class="ti-off">-80%</span> 7,99 €</span>
+        <span class="ti">Red Dead Redemption 2 <span class="ti-off">-67%</span> 19,79 €</span>
+        <span class="ti">Starfield <span class="ti-off">-50%</span> 34,99 €</span>
+        <span class="ti">Hogwarts Legacy <span class="ti-off">-60%</span> 23,99 €</span>
+        <span class="ti">Black Myth: Wukong <span class="ti-off">-40%</span> 35,99 €</span>
+        <span class="ti">Cyberpunk 2077 <span class="ti-off">-70%</span> 14,99 €</span>
+        <span class="ti">Elden Ring <span class="ti-off">-35%</span> 32,49 €</span>
+        <span class="ti">Baldur's Gate 3 <span class="ti-off">-30%</span> 41,99 €</span>
+        <span class="ti">The Witcher 3 <span class="ti-off">-80%</span> 7,99 €</span>
+        <span class="ti">Red Dead Redemption 2 <span class="ti-off">-67%</span> 19,79 €</span>
+        <span class="ti">Starfield <span class="ti-off">-50%</span> 34,99 €</span>
+        <span class="ti">Hogwarts Legacy <span class="ti-off">-60%</span> 23,99 €</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PAGE CONTENT ════════════════════════════════════════════ -->
+<div class="page">
+
+  <!-- MEILLEURES PROMOS -->
+  <div class="sec">
+    <div class="sec-top">
+      <div><div class="sec-label">Steam · GOG · Epic · Ubisoft</div><h2 class="sec-title">Meilleures promos <span class="dim">du moment</span></h2></div>
+      <button class="see-all">Toutes les promos →</button>
+    </div>
+    <div class="pcards">
+      <div class="pcard">
+        <div class="pcard-cover">
+          <img src="https://cdn.akamai.steamstatic.com/steam/apps/1091500/library_600x900.jpg" alt="" onerror="this.style.background='#18143a'">
+          <div class="pcard-badges"><span class="b-store">Steam</span><span class="b-off">-70%</span></div>
+          <div class="pcard-score"><span class="mc mc-g">92</span></div>
+        </div>
+        <div class="pcard-body"><div class="pcard-name">Cyberpunk 2077</div><div class="pcard-pr"><span class="pr-new">14,99 €</span><span class="pr-old">49,99 €</span></div></div>
+      </div>
+      <div class="pcard">
+        <div class="pcard-cover">
+          <img src="https://cdn.akamai.steamstatic.com/steam/apps/1716740/library_600x900.jpg" alt="" onerror="this.style.background='#18143a'">
+          <div class="pcard-badges"><span class="b-store">Steam</span><span class="b-off">-35%</span></div>
+          <div class="pcard-score"><span class="mc mc-g">96</span></div>
+        </div>
+        <div class="pcard-body"><div class="pcard-name">Elden Ring</div><div class="pcard-pr"><span class="pr-new">32,49 €</span><span class="pr-old">49,99 €</span></div></div>
+      </div>
+      <div class="pcard">
+        <div class="pcard-cover">
+          <img src="https://cdn.akamai.steamstatic.com/steam/apps/1245620/library_600x900.jpg" alt="" onerror="this.style.background='#18143a'">
+          <div class="pcard-badges"><span class="b-store">Steam</span><span class="b-off">-30%</span></div>
+          <div class="pcard-score"><span class="mc mc-g">97</span></div>
+        </div>
+        <div class="pcard-body"><div class="pcard-name">Baldur's Gate 3</div><div class="pcard-pr"><span class="pr-new">41,99 €</span><span class="pr-old">59,99 €</span></div></div>
+      </div>
+      <div class="pcard">
+        <div class="pcard-cover">
+          <img src="https://cdn.akamai.steamstatic.com/steam/apps/292030/library_600x900.jpg" alt="" onerror="this.style.background='#18143a'">
+          <div class="pcard-badges"><span class="b-store">GOG</span><span class="b-off">-80%</span></div>
+          <div class="pcard-score"><span class="mc mc-g">93</span></div>
+        </div>
+        <div class="pcard-body"><div class="pcard-name">The Witcher 3: Wild Hunt</div><div class="pcard-pr"><span class="pr-new">7,99 €</span><span class="pr-old">39,99 €</span></div></div>
+      </div>
+      <div class="pcard">
+        <div class="pcard-cover">
+          <img src="https://cdn.akamai.steamstatic.com/steam/apps/2358720/library_600x900.jpg" alt="" onerror="this.style.background='#18143a'">
+          <div class="pcard-badges"><span class="b-store">Steam</span><span class="b-off">-60%</span></div>
+          <div class="pcard-score"><span class="mc mc-y">84</span></div>
+        </div>
+        <div class="pcard-body"><div class="pcard-name">Hogwarts Legacy</div><div class="pcard-pr"><span class="pr-new">23,99 €</span><span class="pr-old">59,99 €</span></div></div>
+      </div>
+      <div class="pcard">
+        <div class="pcard-cover">
+          <img src="https://cdn.akamai.steamstatic.com/steam/apps/553850/library_600x900.jpg" alt="" onerror="this.style.background='#18143a'">
+          <div class="pcard-badges"><span class="b-store">Steam</span><span class="b-off">-33%</span></div>
+          <div class="pcard-score"><span class="mc mc-y">82</span></div>
+        </div>
+        <div class="pcard-body"><div class="pcard-name">Helldivers 2</div><div class="pcard-pr"><span class="pr-new">19,99 €</span><span class="pr-old">29,99 €</span></div></div>
+      </div>
+      <div class="pcard">
+        <div class="pcard-cover">
+          <img src="https://cdn.akamai.steamstatic.com/steam/apps/1203220/library_600x900.jpg" alt="" onerror="this.style.background='#18143a'">
+          <div class="pcard-badges"><span class="b-store">Steam</span><span class="b-off">-67%</span></div>
+          <div class="pcard-score"><span class="mc mc-g">91</span></div>
+        </div>
+        <div class="pcard-body"><div class="pcard-name">Red Dead Redemption 2</div><div class="pcard-pr"><span class="pr-new">19,79 €</span><span class="pr-old">59,99 €</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="sep">
+
+  <!-- FEATURED -->
+  <div class="sec">
+    <div class="sec-top">
+      <div><div class="sec-label">Sélection GigaPrice</div><h2 class="sec-title">À ne pas manquer</h2></div>
+      <button class="see-all">Voir tout →</button>
+    </div>
+    <div class="feat">
+      <div class="feat-big">
+        <img src="https://cdn.akamai.steamstatic.com/steam/apps/2835570/library_hero.jpg" alt="" onerror="this.src='https://via.placeholder.com/900x500/100d24/7c3aed?text=Featured'">
+        <div class="feat-big-ov">
+          <div class="feat-tag">★ Coup de cœur</div>
+          <h3 class="feat-big-title">Black Myth: Wukong</h3>
+          <p class="feat-big-desc">Le jeu d'action-RPG chinois qui a conquis le monde entier. Une réalisation visuelle époustouflante.</p>
+          <div class="feat-row">
+            <span class="feat-price">35,99 €</span>
+            <span class="feat-old">59,99 €</span>
+            <span class="feat-badge">-40%</span>
+            <button class="feat-btn">Voir l'offre →</button>
+          </div>
+        </div>
+      </div>
+      <div class="feat-sm">
+        <img src="https://cdn.akamai.steamstatic.com/steam/apps/1245620/library_hero.jpg" alt="" onerror="this.src='https://via.placeholder.com/500x250/100d24/7c3aed?text=BG3'">
+        <div class="feat-sm-ov">
+          <h4 class="feat-sm-name">Baldur's Gate 3</h4>
+          <div class="feat-sm-row"><span class="feat-sm-pr">41,99 €</span><span class="feat-sm-old">59,99 €</span><span class="mc mc-g">97</span></div>
+        </div>
+      </div>
+      <div class="feat-sm">
+        <img src="https://cdn.akamai.steamstatic.com/steam/apps/1716740/library_hero.jpg" alt="" onerror="this.src='https://via.placeholder.com/500x250/100d24/7c3aed?text=Elden Ring'">
+        <div class="feat-sm-ov">
+          <h4 class="feat-sm-name">Elden Ring</h4>
+          <div class="feat-sm-row"><span class="feat-sm-pr">32,49 €</span><span class="feat-sm-old">49,99 €</span><span class="mc mc-g">96</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="sep">
+
+  <!-- TOP VENTES -->
+  <div class="sec">
+    <div class="sec-top">
+      <div><div class="sec-label">Classement hebdomadaire</div><h2 class="sec-title">Top ventes <span class="dim">cette semaine</span></h2></div>
+      <button class="see-all">Classement complet →</button>
+    </div>
+    <div class="ranks">
+      <div class="rank-card">
+        <div class="rank-n n1">#1</div>
+        <div class="rank-img"><img src="https://cdn.akamai.steamstatic.com/steam/apps/2835570/header.jpg" alt="" onerror="this.src='https://via.placeholder.com/300x169/100d24/fbbf24?text=1'"></div>
+        <div class="rank-body"><div class="rank-name">Black Myth: Wukong</div><div class="rank-foot"><span class="mc mc-g">95</span><span class="rank-price">35,99 €</span></div></div>
+      </div>
+      <div class="rank-card">
+        <div class="rank-n n2">#2</div>
+        <div class="rank-img"><img src="https://cdn.akamai.steamstatic.com/steam/apps/1245620/header.jpg" alt="" onerror="this.src='https://via.placeholder.com/300x169/100d24/94a3b8?text=2'"></div>
+        <div class="rank-body"><div class="rank-name">Baldur's Gate 3</div><div class="rank-foot"><span class="mc mc-g">97</span><span class="rank-price">41,99 €</span></div></div>
+      </div>
+      <div class="rank-card">
+        <div class="rank-n n3">#3</div>
+        <div class="rank-img"><img src="https://cdn.akamai.steamstatic.com/steam/apps/1716740/header.jpg" alt="" onerror="this.src='https://via.placeholder.com/300x169/100d24/c07d4e?text=3'"></div>
+        <div class="rank-body"><div class="rank-name">Elden Ring</div><div class="rank-foot"><span class="mc mc-g">96</span><span class="rank-price">32,49 €</span></div></div>
+      </div>
+      <div class="rank-card">
+        <div class="rank-n nrest">#4</div>
+        <div class="rank-img"><img src="https://cdn.akamai.steamstatic.com/steam/apps/1091500/header.jpg" alt="" onerror="this.src='https://via.placeholder.com/300x169/100d24/4a4670?text=4'"></div>
+        <div class="rank-body"><div class="rank-name">Cyberpunk 2077</div><div class="rank-foot"><span class="mc mc-g">92</span><span class="rank-price">14,99 €</span></div></div>
+      </div>
+      <div class="rank-card">
+        <div class="rank-n nrest">#5</div>
+        <div class="rank-img"><img src="https://cdn.akamai.steamstatic.com/steam/apps/292030/header.jpg" alt="" onerror="this.src='https://via.placeholder.com/300x169/100d24/4a4670?text=5'"></div>
+        <div class="rank-body"><div class="rank-name">The Witcher 3: Wild Hunt</div><div class="rank-foot"><span class="mc mc-g">93</span><span class="rank-price">7,99 €</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="sep">
+
+  <!-- SPLIT -->
+  <div class="sec">
+    <div class="split">
+      <div>
+        <div class="sec-top" style="margin-bottom:18px">
+          <div><div class="sec-label">Sélection</div><h2 class="sec-title">Meilleures offres</h2></div>
+          <button class="see-all">Tout voir →</button>
+        </div>
+        <div class="promo-list">
+          <div class="promo-row">
+            <div class="promo-pos">1</div>
+            <div class="promo-thumb"><img src="https://cdn.akamai.steamstatic.com/steam/apps/1091500/library_600x900.jpg" alt="" onerror="this.style.background='#18143a'"></div>
+            <div class="promo-info"><div class="promo-name">Cyberpunk 2077</div><div class="promo-sub">Steam · Action RPG</div><div class="promo-prices"><span class="p-now">14,99 €</span><span class="p-was">49,99 €</span><span class="p-off">-70%</span></div></div>
+            <span class="mc mc-g">92</span>
+          </div>
+          <div class="promo-row">
+            <div class="promo-pos">2</div>
+            <div class="promo-thumb"><img src="https://cdn.akamai.steamstatic.com/steam/apps/292030/library_600x900.jpg" alt="" onerror="this.style.background='#18143a'"></div>
+            <div class="promo-info"><div class="promo-name">The Witcher 3</div><div class="promo-sub">GOG · RPG</div><div class="promo-prices"><span class="p-now">7,99 €</span><span class="p-was">39,99 €</span><span class="p-off">-80%</span></div></div>
+            <span class="mc mc-g">93</span>
+          </div>
+          <div class="promo-row">
+            <div class="promo-pos">3</div>
+            <div class="promo-thumb"><img src="https://cdn.akamai.steamstatic.com/steam/apps/2358720/library_600x900.jpg" alt="" onerror="this.style.background='#18143a'"></div>
+            <div class="promo-info"><div class="promo-name">Hogwarts Legacy</div><div class="promo-sub">Steam · Action</div><div class="promo-prices"><span class="p-now">23,99 €</span><span class="p-was">59,99 €</span><span class="p-off">-60%</span></div></div>
+            <span class="mc mc-y">84</span>
+          </div>
+          <div class="promo-row">
+            <div class="promo-pos">4</div>
+            <div class="promo-thumb"><img src="https://cdn.akamai.steamstatic.com/steam/apps/553850/library_600x900.jpg" alt="" onerror="this.style.background='#18143a'"></div>
+            <div class="promo-info"><div class="promo-name">Helldivers 2</div><div class="promo-sub">Steam · TPS Coop</div><div class="promo-prices"><span class="p-now">19,99 €</span><span class="p-was">29,99 €</span><span class="p-off">-33%</span></div></div>
+            <span class="mc mc-y">82</span>
+          </div>
+          <div class="promo-row">
+            <div class="promo-pos">5</div>
+            <div class="promo-thumb"><img src="https://cdn.akamai.steamstatic.com/steam/apps/1716740/library_600x900.jpg" alt="" onerror="this.style.background='#18143a'"></div>
+            <div class="promo-info"><div class="promo-name">Elden Ring</div><div class="promo-sub">Steam · Souls-like</div><div class="promo-prices"><span class="p-now">32,49 €</span><span class="p-was">49,99 €</span><span class="p-off">-35%</span></div></div>
+            <span class="mc mc-g">96</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="sec-top" style="margin-bottom:18px">
+          <div><div class="sec-label">Limité dans le temps</div><h2 class="sec-title">Jeux <span style="color:var(--teal)">gratuits</span></h2></div>
+          <button class="see-all">Tout voir →</button>
+        </div>
+        <div class="free-g">
+          <div class="fc"><div class="fc-img"><img src="https://cdn.akamai.steamstatic.com/steam/apps/1623730/header.jpg" alt="" onerror="this.src='https://via.placeholder.com/280x158/100d24/2dd4bf?text=FREE'"></div><div class="fc-badge">GRATUIT</div><div class="fc-body"><div class="fc-name">Palworld</div><div class="fc-time">⏱ 2j 14h</div></div></div>
+          <div class="fc"><div class="fc-img"><img src="https://cdn.akamai.steamstatic.com/steam/apps/440/header.jpg" alt="" onerror="this.src='https://via.placeholder.com/280x158/100d24/2dd4bf?text=FREE'"></div><div class="fc-badge">STEAM</div><div class="fc-body"><div class="fc-name">Team Fortress 2</div><div class="fc-perm">Toujours gratuit</div></div></div>
+          <div class="fc"><div class="fc-img"><img src="https://cdn.akamai.steamstatic.com/steam/apps/359550/header.jpg" alt="" onerror="this.src='https://via.placeholder.com/280x158/100d24/2dd4bf?text=FREE'"></div><div class="fc-badge">EPIC</div><div class="fc-body"><div class="fc-name">Rainbow Six Siege</div><div class="fc-time">⏱ 4j 8h</div></div></div>
+          <div class="fc"><div class="fc-img"><img src="https://cdn.akamai.steamstatic.com/steam/apps/238960/header.jpg" alt="" onerror="this.src='https://via.placeholder.com/280x158/100d24/2dd4bf?text=FREE'"></div><div class="fc-badge">GOG</div><div class="fc-body"><div class="fc-name">Path of Exile 2</div><div class="fc-time">⏱ 6j</div></div></div>
+          <div class="fc"><div class="fc-img"><img src="https://cdn.akamai.steamstatic.com/steam/apps/252490/header.jpg" alt="" onerror="this.src='https://via.placeholder.com/280x158/100d24/2dd4bf?text=FREE'"></div><div class="fc-badge">STEAM</div><div class="fc-body"><div class="fc-name">Rust</div><div class="fc-time">⏱ Weekend</div></div></div>
+          <div class="fc"><div class="fc-img"><img src="https://cdn.akamai.steamstatic.com/steam/apps/271590/header.jpg" alt="" onerror="this.src='https://via.placeholder.com/280x158/100d24/2dd4bf?text=FREE'"></div><div class="fc-badge">ESSAI</div><div class="fc-body"><div class="fc-name">GTA V Premium</div><div class="fc-time">⏱ 1j 3h</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="sep">
+
+  <!-- SORTIES RÉCENTES -->
+  <div class="sec">
+    <div class="sec-top">
+      <div><div class="sec-label">30 derniers jours</div><h2 class="sec-title">Sorties récentes</h2></div>
+      <button class="see-all">Voir tout →</button>
+    </div>
+    <div class="rels">
+      <div class="rel"><div class="rel-cover"><img src="https://cdn.akamai.steamstatic.com/steam/apps/2835570/header.jpg" alt="" onerror="this.src='https://via.placeholder.com/400x225/100d24/4ade80?text=New'"><div class="new-badge">NOUVEAU</div></div><div class="rel-body"><div class="rel-name">Black Myth: Wukong</div><div class="rel-foot"><span class="rel-date">20 août 2024</span><span class="rel-price">35,99 €</span></div></div></div>
+      <div class="rel"><div class="rel-cover"><img src="https://cdn.akamai.steamstatic.com/steam/apps/1623730/header.jpg" alt="" onerror="this.src='https://via.placeholder.com/400x225/100d24/4ade80?text=New'"><div class="new-badge">NOUVEAU</div></div><div class="rel-body"><div class="rel-name">Palworld</div><div class="rel-foot"><span class="rel-date">19 jan. 2024</span><span class="rel-price" style="color:var(--teal)">GRATUIT</span></div></div></div>
+      <div class="rel"><div class="rel-cover"><img src="https://cdn.akamai.steamstatic.com/steam/apps/553850/header.jpg" alt="" onerror="this.src='https://via.placeholder.com/400x225/100d24/4ade80?text=New'"><div class="new-badge">NOUVEAU</div></div><div class="rel-body"><div class="rel-name">Helldivers 2</div><div class="rel-foot"><span class="rel-date">8 fév. 2024</span><span class="rel-price">19,99 €</span></div></div></div>
+      <div class="rel"><div class="rel-cover"><img src="https://cdn.akamai.steamstatic.com/steam/apps/1985810/header.jpg" alt="" onerror="this.src='https://via.placeholder.com/400x225/100d24/4ade80?text=New'"><div class="new-badge">NOUVEAU</div></div><div class="rel-body"><div class="rel-name">Starfield</div><div class="rel-foot"><span class="rel-date">6 sept. 2023</span><span class="rel-price">34,99 €</span></div></div></div>
+    </div>
+  </div>
+
+  <hr class="sep">
+
+  <!-- ACTUALITÉS -->
+  <div class="sec">
+    <div class="sec-top">
+      <div><div class="sec-label">Actu gaming</div><h2 class="sec-title">Dernières nouvelles</h2></div>
+      <button class="see-all">Toutes les actus →</button>
+    </div>
+    <div class="news">
+      <div class="news-big">
+        <img src="https://cdn.akamai.steamstatic.com/steam/apps/2835570/library_hero.jpg" alt="" onerror="this.src='https://via.placeholder.com/700x394/100d24/7c3aed?text=News'">
+        <div class="news-big-body"><div class="n-cat">Analyse</div><div class="news-big-title">Black Myth: Wukong devient le jeu le plus vendu de 2024</div><div class="n-date">Il y a 2 heures · GigaPrice</div></div>
+      </div>
+      <div class="news-sm">
+        <img src="https://cdn.akamai.steamstatic.com/steam/apps/1245620/header.jpg" alt="" onerror="this.src='https://via.placeholder.com/300x169/100d24/7c3aed?text=News'">
+        <div class="news-sm-body"><div class="n-cat" style="color:var(--violet)">Mise à jour</div><div class="news-sm-title">Le patch 7 de Baldur's Gate 3 ajoute de nouveaux contenus</div><div class="n-date" style="font-size:10px;color:var(--t3)">Il y a 5 heures</div></div>
+      </div>
+      <div class="news-sm">
+        <img src="https://cdn.akamai.steamstatic.com/steam/apps/1716740/header.jpg" alt="" onerror="this.src='https://via.placeholder.com/300x169/100d24/7c3aed?text=News'">
+        <div class="news-sm-body"><div class="n-cat" style="color:var(--amber)">DLC</div><div class="news-sm-title">Elden Ring: Shadow of the Erdtree — guide complet</div><div class="n-date" style="font-size:10px;color:var(--t3)">Hier</div></div>
+      </div>
+      <div class="news-sm">
+        <img src="https://cdn.akamai.steamstatic.com/steam/apps/1091500/header.jpg" alt="" onerror="this.src='https://via.placeholder.com/300x169/100d24/7c3aed?text=News'">
+        <div class="news-sm-body"><div class="n-cat" style="color:var(--teal)">Gratuit</div><div class="news-sm-title">Cyberpunk 2077 offert ce weekend sur Epic Games Store</div><div class="n-date" style="font-size:10px;color:var(--t3)">Il y a 2 jours</div></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+<!-- ═══ FOOTER ══════════════════════════════════════════════════ -->
+<footer>
+  <div class="page">
+    <div class="footer-grid">
+      <div>
+        <span class="footer-logo">GigaPrice</span>
+        <p class="footer-desc">Le comparateur de prix gaming de référence. Steam, GOG, Epic, Xbox, PlayStation, Nintendo — on surveille tout pour que vous ne ratiez aucune promo.</p>
+        <div class="footer-tags"><span class="ftag">Steam</span><span class="ftag">Epic Games</span><span class="ftag">GOG</span><span class="ftag">Xbox</span><span class="ftag">PlayStation</span><span class="ftag">Nintendo</span></div>
+      </div>
+      <div class="fcol"><div class="fc-title">Navigation</div><a href="#">Promotions</a><a href="#">Jeux Gratuits</a><a href="#">Nouvelles Sorties</a><a href="#">Hardware</a><a href="#">Actualités</a></div>
+      <div class="fcol"><div class="fc-title">Communauté</div><a href="#">Discord</a><a href="#">Alertes Prix</a><a href="#">Classement</a><a href="#">Newsletter</a></div>
+      <div class="fcol"><div class="fc-title">GigaPrice</div><a href="#">À propos</a><a href="#">Contact</a><a href="#">Mentions légales</a><a href="#">Confidentialité</a></div>
+    </div>
+    <div class="footer-bot">
+      <div class="footer-copy">© 2024 GigaPrice · Aucune affiliation avec les plateformes mentionnées.</div>
+      <div class="footer-pills"><span class="fpill">v2.0</span><span class="fpill">Next.js 15</span><span class="fpill">MySQL</span></div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
